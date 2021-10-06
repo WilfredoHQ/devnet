@@ -25,6 +25,7 @@ def create_table():
     maternal_surname VARCHAR(255),
     age INTEGER
     )""")
+
     con.commit()
 
 
@@ -46,6 +47,7 @@ def fill():
         (12345679, "SERGIO","IVAN","PEÑA","ESPINO", 21),
         (12345680, "JOHAN","HANS","QUINTOS","ROJAS", 22)
         """)
+
         con.commit()
         secho("Llenado correctamente", fg="green")
     except sqlite3.Error as e:
@@ -58,7 +60,6 @@ def fill():
 @command()
 def create():
     echo(f'Para cancelar el proceso presione {style("CTRL + C", fg="yellow")}')
-
     new_participant = {}
 
     while True:
@@ -79,6 +80,7 @@ def create():
     try:
         cur.execute("""INSERT INTO participants (dni, first_name, middle_name, paternal_surname, maternal_surname, age) VALUES
         (:dni, :first_name, :middle_name, :paternal_surname, :maternal_surname, :age)""", new_participant)
+
         con.commit()
         secho("Creado correctamente.", fg="green")
     except sqlite3.Error as e:
@@ -87,9 +89,10 @@ def create():
 
 @command()
 @argument("dni", type=int)
-def read(dni):
+def read(dni: int):
     try:
         participant = cur.execute("SELECT * FROM participants WHERE dni=:dni", {"dni": dni}).fetchone()
+
         if bool(participant):
             echo(style("ID: ", fg="cyan") + str(participant[0]))
             echo(style("DNI: ", fg="cyan") + str(participant[1]))
@@ -105,8 +108,9 @@ def read(dni):
 
 @command()
 @argument("dni", type=int)
-def update(dni):
+def update(dni: int):
     participant = cur.execute("SELECT * FROM participants WHERE dni=:dni", {"dni": dni}).fetchone()
+
     if bool(participant):
         echo(f'Para cancelar el proceso presione {style("CTRL + C", fg="yellow")}')
 
@@ -126,6 +130,7 @@ def update(dni):
             maternal_surname=:maternal_surname,
             age=:age
             WHERE dni=:dni""", updated_data)
+
             con.commit()
             secho("Actualizado correctamente.", fg="green")
         except sqlite3.Error as e:
@@ -136,8 +141,9 @@ def update(dni):
 
 @command()
 @argument("dni", type=int)
-def delete(dni):
+def delete(dni: int):
     participant = cur.execute("SELECT * FROM participants WHERE dni=:dni", {"dni": dni}).fetchone()
+
     if bool(participant):
         if confirm('El registro no se podrá recuperar. ¿Desea continuar?', default=True):
             try:

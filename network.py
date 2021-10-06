@@ -12,11 +12,6 @@ def sigint_handler(signum, frame):
 signal.signal(signal.SIGINT, sigint_handler)
 
 
-@group()
-def cli():
-    pass
-
-
 initial_db = {
     "AR_1": {
         "Fa0/0": "193.168.0.2/28",
@@ -38,7 +33,6 @@ initial_db = {
         "Se0/0/0": "173.16.0.1/30",
         "Se0/0/1": "173.16.0.5/30"
     },
-
     "ASw2": {
         "Fa0/1": "",
         "Fa4/1": "",
@@ -69,60 +63,32 @@ initial_db = {
 }
 
 links = (
-    (
-        ("AR_1", "Fa1/0"),
-        ("ASw11", "Vlan1")
-    ),
-    (
-        ("AR_1", "Gig0/1/0"),
-        ("ASw12", "Vlan1")
-    ),
-    (
-        ("AR_1", "Se0/3/0"),
-        ("AR_HUB", "Se0/0/0")
-    ),
-    (
-        ("AR_1", "Fa0/0"),
-        ("AC1", "Vlan1")
-    ),
-    (
-        ("AR_2", "Gig0/0"),
-        ("ASw2", "Vlan1")
-    ),
-    (
-        ("AR_2", "Gig0/1"),
-        ("AC1", "Vlan1")
-    ),
-    (
-        ("AR_3", "Se0/2/0"),
-        ("AR_HUB", "Se0/0/1")
-    ),
-    (
-        ("AR_3", "Gig0/0/0"),
-        ("ASw31", "Vlan1")
-    ),
-    (
-        ("AR_3", "Gig0/0/1"),
-        ("ASw32", "Vlan1")
-    ),
-    (
-        ("AR_HUB", "Fa0/0"),
-        ("AC1", "Vlan1")
-    )
+    (("AR_1", "Fa1/0"), ("ASw11", "Vlan1")),
+    (("AR_1", "Gig0/1/0"), ("ASw12", "Vlan1")),
+    (("AR_1", "Se0/3/0"), ("AR_HUB", "Se0/0/0")),
+    (("AR_1", "Fa0/0"), ("AC1", "Vlan1")),
+    (("AR_2", "Gig0/0"), ("ASw2", "Vlan1")),
+    (("AR_2", "Gig0/1"), ("AC1", "Vlan1")),
+    (("AR_3", "Se0/2/0"), ("AR_HUB", "Se0/0/1")),
+    (("AR_3", "Gig0/0/0"), ("ASw31", "Vlan1")),
+    (("AR_3", "Gig0/0/1"), ("ASw32", "Vlan1")),
+    (("AR_HUB", "Fa0/0"), ("AC1", "Vlan1"))
 )
 
 
-@ command()
+@group()
+def cli():
+    pass
+
+
+@command()
 def test():
     for link in links:
         start_ip = IPv4Interface(initial_db[link[0][0]][link[0][1]])
         end_ip = IPv4Interface(initial_db[link[1][0]][link[1][1]])
-
         start_info = f'{style(link[0][0], fg="cyan")} ({link[0][1]})'
         end_info = f'{style(link[1][0], fg="cyan")} ({link[1][1]})'
-
         checkmark = style("✓", fg="green") if end_ip.ip in start_ip.network else style("✗", fg="red")
-
         msg = f'{start_info} - {end_info} {checkmark}'
         print(msg)
 
