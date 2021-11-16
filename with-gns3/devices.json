@@ -1,0 +1,70 @@
+[
+    {
+        "ip": "192.168.122.10",
+        "user": "wilfredo",
+        "password": "huancollo",
+        "interfaces": {
+            "s1/0": "200.10.10.1/30",
+            "lo10": "10.10.10.1/24",
+            "lo20": "20.20.20.1/24"
+        },
+        "ospf_networks": [
+            "s1/0",
+            "lo10",
+            "lo20"
+        ],
+        "commands": [
+            "conf ter",
+            "hostname R1",
+            [
+                "interfaces",
+                "int {key}",
+                "ip add {value}",
+                "no shut"
+            ],
+            "exit",
+            "router ospf 1",
+            "router-id 1.1.1.1",
+            [
+                "ospf_networks",
+                "net {value} area 0"
+            ],
+            "exit",
+            "do wr"
+        ]
+    },
+    {
+        "ip": "192.168.122.20",
+        "user": "wilfredo",
+        "password": "huancollo",
+        "interfaces": {
+            "s1/0": "200.10.10.2/30",
+            "lo11": "11.11.11.1/24",
+            "lo12": "12.12.12.1/24"
+        },
+        "ospf_networks": [
+            "s1/0",
+            "lo11",
+            "lo12"
+        ],
+        "commands": [
+            "conf ter",
+            "hostname R2",
+            [
+                "interfaces",
+                "int {key}",
+                "ip add {value}",
+                "no shut"
+            ],
+            "exit",
+            "router ospf 1",
+            "router-id 2.2.2.2",
+            [
+                "ospf_networks",
+                "net {value} area 0"
+            ],
+            "exit",
+            "do wr"
+        ]
+    }
+]
